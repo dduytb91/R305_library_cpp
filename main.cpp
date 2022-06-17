@@ -74,9 +74,9 @@ uint8_t getFingerprintID()
     }
 
     // found a match!
-    printf("Found ID #\n");
+    printf("Found ID #");
     printf("%u", finger.fingerID);
-    printf(" with confidence of \n");
+    printf(" with confidence of ");
     printf("%u\n", finger.confidence);
 
     return finger.fingerID;
@@ -98,9 +98,9 @@ int getFingerprintIDez()
         return -1;
 
     // found a match!
-    printf("Found ID #\n");
+    printf("Found ID #");
     printf("%u", finger.fingerID);
-    printf(" with confidence of \n");
+    printf(" with confidence of ");
     printf("%u\n", finger.confidence);
     return finger.fingerID;
 }
@@ -165,8 +165,8 @@ uint8_t getFingerprintEnroll(uint16_t id)
     {
         p = finger.getImage();
     }
-    printf("ID \n");
-    printf("%u", id);
+    printf("ID ");
+    printf("%u\n", id);
     p = -1;
     printf("Place same finger again\n");
     while (p != FINGERPRINT_OK)
@@ -242,7 +242,7 @@ uint8_t getFingerprintEnroll(uint16_t id)
         return p;
     }
 
-    printf("ID \n");
+    printf("ID ");
     printf("%u\n", id);
     p = finger.storeModel(id);
     if (p == FINGERPRINT_OK)
@@ -350,9 +350,8 @@ uint8_t downloadFingerprintTemplate(uint16_t id)
     }
     for (int i = 0; i < 512; ++i)
     {
-        // Serial.print("0x\n");
         printHex(fingerTemplate[i], 2);
-        // Serial.print(", \n");
+        printf(" ");
     }
     printf("\ndone.\n");
 }
