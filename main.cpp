@@ -75,9 +75,9 @@ uint8_t getFingerprintID()
 
     // found a match!
     printf("Found ID #\n");
-    printf(finger.fingerID);
+    printf("%u", finger.fingerID);
     printf(" with confidence of \n");
-    printf(finger.confidence);
+    printf("%u", finger.confidence);
 
     return finger.fingerID;
 }
@@ -99,9 +99,9 @@ int getFingerprintIDez()
 
     // found a match!
     printf("Found ID #\n");
-    printf(finger.fingerID);
+    printf("%u", finger.fingerID);
     printf(" with confidence of \n");
-    printf(finger.confidence);
+    printf("%u", finger.confidence);
     return finger.fingerID;
 }
 
@@ -123,7 +123,7 @@ int main()
     }
     finger.getTemplateCount();
     printf("Sensor contains \n");
-    printf(finger.templateCount);
+    printf("%u", finger.templateCount);
     printf(" templates\n");
     printf("Waiting for valid finger...\n");
 

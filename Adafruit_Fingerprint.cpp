@@ -87,7 +87,7 @@ void Adafruit_Fingerprint::begin(uint32_t baudrate)
     @returns True if password is correct
 */
 /**************************************************************************/
-boolean Adafruit_Fingerprint::verifyPassword(void)
+bool Adafruit_Fingerprint::verifyPassword(void)
 {
     return checkPassword() == FINGERPRINT_OK;
 }

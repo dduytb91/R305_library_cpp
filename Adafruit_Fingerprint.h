@@ -116,7 +116,7 @@ public:
 
     void begin(uint32_t baud);
 
-    boolean verifyPassword(void);
+    bool verifyPassword(void);
     uint8_t getImage(void);
     uint8_t image2Tz(uint8_t slot = 1);
     uint8_t createModel(void);
