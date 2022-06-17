@@ -196,7 +196,7 @@ uint8_t Adafruit_Fingerprint::receiveModel(uint8_t *buffer)
     {
         if(serialDataAvail(_fd))
         {
-            bytesReceived[i++] = (uint8_t)serialGetchar(_fd);
+            buffer[i++] = (uint8_t)serialGetchar(_fd);
         }
     }
     printf("%u", i);
