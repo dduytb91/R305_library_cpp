@@ -244,7 +244,7 @@ uint8_t getFingerprintEnroll(uint16_t id)
 
     printf("ID \n");
     printf("%u\n", id);
-    p = finger.storeModel("%u\n", id);
+    p = finger.storeModel(id);
     if (p == FINGERPRINT_OK)
     {
         printf("Stored!\n");
@@ -299,8 +299,8 @@ uint8_t downloadFingerprintTemplate(uint16_t id)
         printf("Communication error\n");
         return p;
     default:
-        printf("Unknown error \n");
-        printf(p);
+        printf("Unknown error ");
+        printf("%u\n", p);
         return p;
     }
 
@@ -317,8 +317,8 @@ uint8_t downloadFingerprintTemplate(uint16_t id)
         printf(" transferring:\n");
         break;
     default:
-        printf("Unknown error \n");
-        printf(p);
+        printf("Unknown error ");
+        printf("%u\n", p);
         return p;
     }
 
