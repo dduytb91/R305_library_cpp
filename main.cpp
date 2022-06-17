@@ -74,10 +74,10 @@ uint8_t getFingerprintID()
     }
 
     // found a match!
-    printf("Found ID #\n");
+    printf("Found ID #");
     printf("%u", finger.fingerID);
-    printf(" with confidence of \n");
-    printf("%u", finger.confidence);
+    printf(" with confidence of ");
+    printf("%u\n", finger.confidence);
 
     return finger.fingerID;
 }
@@ -98,11 +98,177 @@ int getFingerprintIDez()
         return -1;
 
     // found a match!
-    printf("Found ID #\n");
+    printf("Found ID #");
     printf("%u", finger.fingerID);
-    printf(" with confidence of \n");
-    printf("%u", finger.confidence);
+    printf(" with confidence of ");
+    printf("%u\n", finger.confidence);
     return finger.fingerID;
+}
+
+uint8_t getFingerprintEnroll(uint8_t id)
+{
+    int p = -1;
+    printf("Waiting for valid finger to enroll as #");
+    printf("%u\n", id);
+    while (p != FINGERPRINT_OK)
+    {
+        p = finger.getImage();
+        switch (p)
+        {
+        case FINGERPRINT_OK:
+            printf("Image taken\n");
+            break;
+        case FINGERPRINT_NOFINGER:
+            printf(".");
+            break;
+        case FINGERPRINT_PACKETRECIEVEERR:
+            printf("Communication error\n");
+            break;
+        case FINGERPRINT_IMAGEFAIL:
+            printf("Imaging error\n");
+            break;
+        default:
+            printf("Unknown error\n");
+            break;
+        }
+    }
+
+    // OK success!
+
+    p = finger.image2Tz(1);
+    switch (p)
+    {
+    case FINGERPRINT_OK:
+        printf("Image converted\n");
+        break;
+    case FINGERPRINT_IMAGEMESS:
+        printf("Image too messy\n");
+        return p;
+    case FINGERPRINT_PACKETRECIEVEERR:
+        printf("Communication error\n");
+        return p;
+    case FINGERPRINT_FEATUREFAIL:
+        printf("Could not find fingerprint features\n");
+        return p;
+    case FINGERPRINT_INVALIDIMAGE:
+        printf("Could not find fingerprint features\n");
+        return p;
+    default:
+        printf("Unknown error\n");
+        return p;
+    }
+
+    printf("Remove finger\n");
+    delay(2000);
+    p = 0;
+    while (p != FINGERPRINT_NOFINGER)
+    {
+        p = finger.getImage();
+    }
+    printf("ID ");
+    printf("%u", id);
+    p = -1;
+    printf("Place same finger again\n");
+    while (p != FINGERPRINT_OK)
+    {
+        p = finger.getImage();
+        switch (p)
+        {
+        case FINGERPRINT_OK:
+            printf("Image taken\n");
+            break;
+        case FINGERPRINT_NOFINGER:
+            printf(".");
+            break;
+        case FINGERPRINT_PACKETRECIEVEERR:
+            printf("Communication error\n");
+            break;
+        case FINGERPRINT_IMAGEFAIL:
+            printf("Imaging error\n");
+            break;
+        default:
+            printf("Unknown error\n");
+            break;
+        }
+    }
+
+    // OK success!
+
+    p = finger.image2Tz(2);
+    switch (p)
+    {
+    case FINGERPRINT_OK:
+        printf("Image converted\n");
+        break;
+    case FINGERPRINT_IMAGEMESS:
+        printf("Image too messy\n");
+        return p;
+    case FINGERPRINT_PACKETRECIEVEERR:
+        printf("Communication error\n");
+        return p;
+    case FINGERPRINT_FEATUREFAIL:
+        printf("Could not find fingerprint features\n");
+        return p;
+    case FINGERPRINT_INVALIDIMAGE:
+        printf("Could not find fingerprint features\n");
+        return p;
+    default:
+        printf("Unknown error\n");
+        return p;
+    }
+
+    // OK converted!
+    printf("Creating model for #");
+    printf("%u\n", id);
+
+    p = finger.createModel();
+    if (p == FINGERPRINT_OK)
+    {
+        printf("Prints matched!\n");
+    }
+    else if (p == FINGERPRINT_PACKETRECIEVEERR)
+    {
+        printf("Communication error\n");
+        return p;
+    }
+    else if (p == FINGERPRINT_ENROLLMISMATCH)
+    {
+        printf("Fingerprints did not match\n");
+        return p;
+    }
+    else
+    {
+        printf("Unknown error\n");
+        return p;
+    }
+
+    printf("ID ");
+    printf("%u\n", id);
+    p = finger.storeModel(id);
+    if (p == FINGERPRINT_OK)
+    {
+        printf("Stored!\n");
+    }
+    else if (p == FINGERPRINT_PACKETRECIEVEERR)
+    {
+        printf("Communication error\n");
+        return p;
+    }
+    else if (p == FINGERPRINT_BADLOCATION)
+    {
+        printf("Could not store in that location\n");
+        return p;
+    }
+    else if (p == FINGERPRINT_FLASHERR)
+    {
+        printf("Error writing to flash\n");
+        return p;
+    }
+    else
+    {
+        printf("Unknown error\n");
+        return p;
+    }
 }
 
 int main()
@@ -127,9 +293,12 @@ int main()
     printf(" templates\n");
     printf("Waiting for valid finger...\n");
 
+    printf("Enrolling ID #3\n");
+    getFingerprintEnroll(3);
+
     while (1)
     {
-        delay(100);
+        delay(50);
         getFingerprintIDez();
     }
     return 1;
