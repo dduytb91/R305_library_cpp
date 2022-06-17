@@ -74,9 +74,9 @@ uint8_t getFingerprintID()
     }
 
     // found a match!
-    printf("Found ID #");
+    printf("Found ID #\n");
     printf("%u", finger.fingerID);
-    printf(" with confidence of ");
+    printf(" with confidence of \n");
     printf("%u\n", finger.confidence);
 
     return finger.fingerID;
@@ -98,17 +98,17 @@ int getFingerprintIDez()
         return -1;
 
     // found a match!
-    printf("Found ID #");
+    printf("Found ID #\n");
     printf("%u", finger.fingerID);
-    printf(" with confidence of ");
+    printf(" with confidence of \n");
     printf("%u\n", finger.confidence);
     return finger.fingerID;
 }
 
-uint8_t getFingerprintEnroll(uint8_t id)
+uint8_t getFingerprintEnroll(uint16_t id)
 {
     int p = -1;
-    printf("Waiting for valid finger to enroll as #");
+    printf("Waiting for valid finger to enroll as #\n");
     printf("%u\n", id);
     while (p != FINGERPRINT_OK)
     {
@@ -119,7 +119,7 @@ uint8_t getFingerprintEnroll(uint8_t id)
             printf("Image taken\n");
             break;
         case FINGERPRINT_NOFINGER:
-            printf(".");
+            printf(".\n");
             break;
         case FINGERPRINT_PACKETRECIEVEERR:
             printf("Communication error\n");
@@ -165,7 +165,7 @@ uint8_t getFingerprintEnroll(uint8_t id)
     {
         p = finger.getImage();
     }
-    printf("ID ");
+    printf("ID \n");
     printf("%u", id);
     p = -1;
     printf("Place same finger again\n");
@@ -178,7 +178,7 @@ uint8_t getFingerprintEnroll(uint8_t id)
             printf("Image taken\n");
             break;
         case FINGERPRINT_NOFINGER:
-            printf(".");
+            printf(".\n");
             break;
         case FINGERPRINT_PACKETRECIEVEERR:
             printf("Communication error\n");
@@ -218,7 +218,7 @@ uint8_t getFingerprintEnroll(uint8_t id)
     }
 
     // OK converted!
-    printf("Creating model for #");
+    printf("Creating model for #\n");
     printf("%u\n", id);
 
     p = finger.createModel();
@@ -242,9 +242,9 @@ uint8_t getFingerprintEnroll(uint8_t id)
         return p;
     }
 
-    printf("ID ");
+    printf("ID \n");
     printf("%u\n", id);
-    p = finger.storeModel(id);
+    p = finger.storeModel("%u\n", id);
     if (p == FINGERPRINT_OK)
     {
         printf("Stored!\n");
@@ -271,6 +271,92 @@ uint8_t getFingerprintEnroll(uint8_t id)
     }
 }
 
+void printHex(int num, int precision)
+{
+    char tmp[16];
+    char format[128];
+
+    sprintf(format, "%%.%dX", precision);
+
+    sprintf(tmp, format, num);
+    printf("%u", tmp);
+}
+
+uint8_t downloadFingerprintTemplate(uint16_t id)
+{
+    printf("------------------------------------\n");
+    printf("Attempting to load #");
+    printf("%u\n", id);
+    uint8_t p = finger.loadModel(id);
+    switch (p)
+    {
+    case FINGERPRINT_OK:
+        printf("Template ");
+        printf("%u", id);
+        printf(" loaded\n");
+        break;
+    case FINGERPRINT_PACKETRECIEVEERR:
+        printf("Communication error\n");
+        return p;
+    default:
+        printf("Unknown error \n");
+        printf(p);
+        return p;
+    }
+
+    // OK success!
+
+    printf("Attempting to get #");
+    printf("%u\n", id);
+    p = finger.getModel();
+    switch (p)
+    {
+    case FINGERPRINT_OK:
+        printf("Template ");
+        printf("%u", id);
+        printf(" transferring:\n");
+        break;
+    default:
+        printf("Unknown error \n");
+        printf(p);
+        return p;
+    }
+
+    // one data packet is 267 bytes. in one data packet, 11 bytes are 'usesless' :D
+    uint8_t bytesReceived[534]; // 2 data packets
+    memset(bytesReceived, 0xff, 534);
+
+    finger.receiveModel(bytesReceived);
+    printf("Decoding packet...\n");
+
+    uint8_t fingerTemplate[512]; // the real template
+    memset(fingerTemplate, 0xff, 512);
+
+    // filtering only the data packets
+    int uindx = 9, index = 0;
+    while (index < 534)
+    {
+        while (index < uindx)
+            ++index;
+        uindx += 256;
+        while (index < uindx)
+        {
+            fingerTemplate[index++] = bytesReceived[index];
+        }
+        uindx += 2;
+        while (index < uindx)
+            ++index;
+        uindx = index + 9;
+    }
+    for (int i = 0; i < 512; ++i)
+    {
+        // Serial.print("0x\n");
+        printHex(fingerTemplate[i], 2);
+        // Serial.print(", \n");
+    }
+    printf("\ndone.\n");
+}
+
 int main()
 {
     finger.begin(57600);
@@ -295,6 +381,9 @@ int main()
 
     printf("Enrolling ID #3\n");
     getFingerprintEnroll(3);
+    delay(3000);
+    downloadFingerprintTemplate(3);
+    delay(3000);
 
     while (1)
     {

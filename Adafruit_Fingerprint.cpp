@@ -68,7 +68,7 @@ void Adafruit_Fingerprint::begin(uint32_t baudrate)
 {
     delay(1000); // one second delay to let the sensor 'boot up'
 
-    if((_fd = serialOpen (_device, baudrate)) < 0 )
+    if ((_fd = serialOpen(_device, baudrate)) < 0)
     {
         printf("serialOpen ERROR.\n");
     }
@@ -180,6 +180,27 @@ uint8_t Adafruit_Fingerprint::loadModel(uint16_t location)
 uint8_t Adafruit_Fingerprint::getModel(void)
 {
     SEND_CMD_PACKET(FINGERPRINT_UPLOAD, 0x01);
+}
+
+/**************************************************************************/
+/*!
+    @brief   Ask the sensor to transfer 256-byte fingerprint template from the buffer to the UART
+    @returns <code>FINGERPRINT_OK</code> on success
+    @returns <code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error
+*/
+uint8_t Adafruit_Fingerprint::receiveModel(uint8_t *buffer)
+{
+    uint32_t starttime = millis();
+    int i = 0;
+    while (i < 534 && (millis() - starttime) < 20000)
+    {
+        if(serialDataAvail(_fd))
+        {
+            bytesReceived[i++] = (uint8_t)serialGetchar(_fd);
+        }
+    }
+    printf("%u", i);
+    printf(" bytes read.\n");
 }
 
 /**************************************************************************/

@@ -125,6 +125,7 @@ public:
     uint8_t storeModel(uint16_t id);
     uint8_t loadModel(uint16_t id);
     uint8_t getModel(void);
+    uint8_t receiveModel(uint8_t *buffer);
     uint8_t deleteModel(uint16_t id);
     uint8_t fingerFastSearch(void);
     uint8_t getTemplateCount(void);
