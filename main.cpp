@@ -350,8 +350,9 @@ uint8_t downloadFingerprintTemplate(uint16_t id)
     }
     for (int i = 0; i < 512; ++i)
     {
-        printHex(fingerTemplate[i], 2);
-        printf(" ");
+        // printHex(fingerTemplate[i], 2);
+        // printf(" ");
+        printf("%X ", fingerTemplate[i])
     }
     printf("\ndone.\n");
 }
