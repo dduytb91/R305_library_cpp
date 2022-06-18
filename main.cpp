@@ -39,7 +39,7 @@ int main()
             num = stoi(line);
             cout << "\nNhap vao ho ten cua User: ";
             getline(std::cin,line);
-            if (_user.addUser(i, line) < 0)
+            if (_user.addUser(num, line) < 0)
                 return 0;
             cout << "Them User thanh cong.\n";
         }
@@ -49,7 +49,7 @@ int main()
             cout << "Nhap vao ID cua User: ";
             getline(std::cin,line);
             num = stoi(line);
-            if (_user.deleteUser(i) < 0)
+            if (_user.deleteUser(num) < 0)
                 return 0;
             cout << "Xoa User thanh cong.\n";
         }
