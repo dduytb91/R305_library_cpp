@@ -95,14 +95,15 @@ int user::addUser(uint8_t id, string name)
     user_obj["fingerprint_model_2"] = temp;
 
     // read a JSON file
-    std::ifstream i(USER_JSON_FILE);
-    i >> user_json_file;
+    std::ifstream in_file(USER_JSON_FILE);
+    in_file >> user_json_file;
+    in_file.close();
     // std::cout << std::setw(4) << user_json_file << endl;
     user_json_file.push_back(user_obj);
 
     // write prettified JSON to another file
-    std::ofstream o(USER_JSON_FILE);
-    o << std::setw(4) << user_json_file << std::endl;
+    std::ofstream out_file(USER_JSON_FILE);
+    out_file << user_json_file;
 }
 int user::deleteUser(uint8_t id) {}
 string user::getUserName(uint8_t id) {}
