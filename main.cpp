@@ -40,15 +40,17 @@ int main()
             cin >> line;
             if (_user.addUser(i, line) < 0)
                 return 0;
+            cout << "Them User thanh cong.\n";
         }
         if (c == '3')
         {
-            cout << "Them User:\n";
+            cout << "Xoa User:\n";
             cout << "Nhap vao ID cua User: ";
             int i;
             cin >> i;
             if (_user.deleteUser(i) < 0)
                 return 0;
+            cout << "Xoa User thanh cong.\n";
         }
         if (c == '4')
         {
