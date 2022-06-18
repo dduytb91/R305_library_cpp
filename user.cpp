@@ -507,10 +507,10 @@ uint8_t user::downloadFingerprintTemplate(uint16_t id, uint8_t *fingerTemplate)
             ++index;
         uindx = index + 9;
     }
-    for (int i = 0; i < 512; ++i)
-    {
-        printf("%2X ", fingerTemplate[i]);
-    }
+    // for (int i = 0; i < 512; ++i)
+    // {
+    //     printf("%2X ", fingerTemplate[i]);
+    // }
     printf("\ndone.\n");
 }
 
