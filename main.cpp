@@ -51,10 +51,6 @@ int main()
         if (c == '4')
         {
         }
-        if (c == '\n')
-        {
-            return 1;
-        }
     }
     return 1;
 }
