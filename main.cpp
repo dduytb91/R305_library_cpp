@@ -15,7 +15,7 @@ int main()
         c = getchar();
         if (c == '1')
         {
-            cout << "Quet van tay:\n";
+            cout << "Quet van tay, nhan q de dung lai:\n";
             while (1)
             {
                 _user.checkSensor();
@@ -25,6 +25,12 @@ int main()
                     id = _user.getUserID(i);
                     name = _user.getUserName(id);
                     cout << "User: " << name << std::endl;
+                    break;
+                }
+                c = getchar();
+                if (c == 'q')
+                {
+                    cout << "STOP!\n";
                     break;
                 }
             }
