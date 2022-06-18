@@ -53,7 +53,7 @@ struct Ring_Buffer
     uint8_t data[100];
     uint8_t read_index;
     uint8_t write_index;
-}
+};
 
 class user
 {

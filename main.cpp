@@ -6,7 +6,7 @@ user _user = user(port);
 
 int main()
 {
-    addUser(10, "Phan Dinh Duy");
+    _user.addUser(10, "Phan Dinh Duy");
 
     while (1)
     {
