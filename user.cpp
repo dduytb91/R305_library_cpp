@@ -28,8 +28,8 @@ user::~user()
 {
 }
 
-user::addUser(uint8_t id, string name) {}
-user::deleteUser(uint8_t id) {}
+void user::addUser(uint8_t id, string name) {}
+void user::deleteUser(uint8_t id) {}
 string user::getUserName(uint8_t id) {}
 uint8_t user::getUserID(uint8_t fingerprint_id) {}
 

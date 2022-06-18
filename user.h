@@ -28,8 +28,8 @@ public:
     user(char *device = NULL, uint32_t baud = 57600, uint32_t password = 0x0);
     ~user();
 
-    addUser(uint8_t id, string name = "");
-    deleteUser(uint8_t id);
+    void addUser(uint8_t id, string name = "");
+    void deleteUser(uint8_t id);
     string getUserName(uint8_t id);
     uint8_t getUserID(uint8_t fingerprint_id);
 };
