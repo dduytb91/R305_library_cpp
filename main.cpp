@@ -13,9 +13,8 @@ int main()
     while (1)
     {
         c = getchar();
-        switch (c)
+        if (c == '1')
         {
-        case '1':
             cout << "Quet van tay:\n";
             while (1)
             {
@@ -29,8 +28,9 @@ int main()
                     break;
                 }
             }
-            break;
-        case '2':
+        }
+        if (c == '2')
+        {
             cout << "Them User:\n";
             cout << "Nhap vao ID cua User: ";
             int i;
@@ -39,22 +39,21 @@ int main()
             string line;
             cin >> line;
             _user.addUser(i, line);
-            break;
-        case '3':
+        }
+        if (c == '3')
+        {
             cout << "Them User:\n";
             cout << "Nhap vao ID cua User: ";
             int i;
             cin >> i;
             _user.deleteUser(i);
-            break;
-        case '4':
-            break;
-        case '\n':
+        }
+        if (c == '4')
+        {
+        }
+        if (c == '\n')
+        {
             return 1;
-            break;
-
-        default:
-            break;
         }
     }
     return 1;
