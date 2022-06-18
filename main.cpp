@@ -2,7 +2,7 @@
 
 char port[] = "/dev/ttyUSB0";
 
-user user = user(port);
+user _user = user(port);
 
 int main()
 {
