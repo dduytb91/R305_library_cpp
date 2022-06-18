@@ -60,7 +60,7 @@ int user::addUser(uint8_t id, string name)
     int index;
     json user_json_file;
 
-    if (getUserName(id) != NULL)
+    if (!getUserName(id).empty())
     {
         deleteUser(id);
     }
@@ -140,6 +140,7 @@ int user::deleteUser(uint8_t id)
 string user::getUserName(uint8_t id)
 {
     json user_json_file;
+    string user_name;
 
     // read a JSON file
     std::ifstream in_file(USER_JSON_FILE);
@@ -150,10 +151,10 @@ string user::getUserName(uint8_t id)
     {
         if (obj["id"] == id)
         {
-            return obj["name"];
+            user_name = obj["name"];
         }
     }
-    return NULL;
+    return user_name;
 }
 int user::getUserID(uint8_t fingerprint_id)
 {
