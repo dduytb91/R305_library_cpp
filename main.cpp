@@ -27,8 +27,7 @@ int main()
                     cout << "User: " << name << std::endl;
                     break;
                 }
-                c = getchar();
-                if (c == 'q')
+                if (getchar() == 'q')
                 {
                     cout << "STOP!\n";
                     break;
@@ -43,7 +42,7 @@ int main()
             cin >> i;
             cout << "\nNhap vao ho ten cua User: ";
             string line;
-            cin >> line;
+            getline(std::cin,line);
             if (_user.addUser(i, line) < 0)
                 return 0;
             cout << "Them User thanh cong.\n";
