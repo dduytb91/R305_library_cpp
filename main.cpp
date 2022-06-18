@@ -5,15 +5,17 @@ char port[] = "/dev/ttyUSB0";
 user _user = user(port);
 int id;
 string name;
-uint8_t c;
+string line;
+int num;
 
 int main()
 {
     cout << "Nhap ki tu:\n";
     while (1)
     {
-        c = getchar();
-        if (c == '1')
+        getline(std::cin,line);
+        num = stoi(line);
+        if (num == 1)
         {
             cout << "Quet van tay:\n";
             while (1)
@@ -29,30 +31,29 @@ int main()
                 }
             }
         }
-        if (c == '2')
+        if (num == 2)
         {
             cout << "Them User:\n";
             cout << "Nhap vao ID cua User: ";
-            int i;
-            cin >> i;
+            getline(std::cin,line);
+            num = stoi(line);
             cout << "\nNhap vao ho ten cua User: ";
-            string line;
             getline(std::cin,line);
             if (_user.addUser(i, line) < 0)
                 return 0;
             cout << "Them User thanh cong.\n";
         }
-        if (c == '3')
+        if (num == 3)
         {
             cout << "Xoa User:\n";
             cout << "Nhap vao ID cua User: ";
-            int i;
-            cin >> i;
+            getline(std::cin,line);
+            num = stoi(line);
             if (_user.deleteUser(i) < 0)
                 return 0;
             cout << "Xoa User thanh cong.\n";
         }
-        if (c == '4')
+        if (num == 4)
         {
         }
     }
