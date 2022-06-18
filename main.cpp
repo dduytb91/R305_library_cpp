@@ -6,12 +6,7 @@ user _user = user(port);
 
 int main()
 {
-    // printf("Enrolling ID #3\n");
-    // getFingerprintEnroll(3);
-    // delay(3000);
-    // downloadFingerprintTemplate(3);
-    // delay(3000);
-    // deleteFingerprint(3);
+    addUser(10, "Phan Dinh Duy");
 
     while (1)
     {

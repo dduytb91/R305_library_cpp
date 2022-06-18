@@ -28,8 +28,83 @@ user::~user()
 {
 }
 
-void user::addUser(uint8_t id, string name) {}
-void user::deleteUser(uint8_t id) {}
+void user::checkSensor()
+{
+    int fingerID = getFingerprintIDez();
+    if (fingerID >= 0)
+    {
+        buffer.write(fingerID);
+    }
+    delay(10);
+}
+
+int user::getBuffer()
+{
+    if (buffer.read_index != buffer.write_index)
+    {
+        return buffer.read();
+    }
+    else
+    {
+        return BUFFER_EMPTY;
+    }
+}
+
+int user::addUser(uint8_t id, string name)
+{
+    uint8_t fingerTemplate[512]; // the real template
+    json file_data;
+    json user_obj;
+    ostringstream ss;
+    string result;
+    string temp;
+    int index;
+    json user_json_file;
+
+    user_obj["id"] = id;
+    user_obj["name"] = name;
+    user_obj["fingerprint_id_1"] = id * 2;
+    user_obj["fingerprint_id_2"] = (id * 2) + 1;
+
+    printf("Add User\n");
+
+    printf("Get Fingerprint 1\n");
+    if (getFingerprintEnroll(id * 2) != FINGERPRINT_OK)
+        return -1;
+    if (downloadFingerprintTemplate(id * 2, fingerTemplate) != FINGERPRINT_OK)
+        return -1;
+    for (index = 0; index < 512; ++index)
+    {
+        ss << std::hex << fingerTemplate[index];
+        result = ss.str();
+        temp.append(result + " ");
+    }
+    user_obj["fingerprint_model_1"] = temp;
+
+    printf("Get Fingerprint 2\n");
+    if (getFingerprintEnroll((id * 2) + 1) != FINGERPRINT_OK)
+        return -1;
+    if (downloadFingerprintTemplate((id * 2) + 1, fingerTemplate) != FINGERPRINT_OK)
+        return -1;
+    for (index = 0; index < 512; ++index)
+    {
+        ss << std::hex << fingerTemplate[index];
+        result = ss.str();
+        temp.append(result + " ");
+    }
+    user_obj["fingerprint_model_2"] = temp;
+
+    // read a JSON file
+    std::ifstream i(USER_JSON_FILE);
+    i >> user_json_file;
+    // std::cout << std::setw(4) << user_json_file << endl;
+    user_json_file.push_back(user_obj);
+
+    // write prettified JSON to another file
+    std::ofstream o(USER_JSON_FILE);
+    o << std::setw(4) << user_json_file << std::endl;
+}
+int user::deleteUser(uint8_t id) {}
 string user::getUserName(uint8_t id) {}
 uint8_t user::getUserID(uint8_t fingerprint_id) {}
 
@@ -137,7 +212,7 @@ int user::getFingerprintIDez()
 uint8_t user::getFingerprintEnroll(uint16_t id)
 {
     int p = -1;
-    printf("Waiting for valid finger to enroll as #\n");
+    printf("Waiting for valid finger to enroll as #");
     printf("%u\n", id);
     while (p != FINGERPRINT_OK)
     {
@@ -247,7 +322,7 @@ uint8_t user::getFingerprintEnroll(uint16_t id)
     }
 
     // OK converted!
-    printf("Creating model for #\n");
+    printf("Creating model for #");
     printf("%u\n", id);
 
     p = finger.createModel();
@@ -298,9 +373,10 @@ uint8_t user::getFingerprintEnroll(uint16_t id)
         printf("Unknown error\n");
         return p;
     }
+    return FINGERPRINT_OK;
 }
 
-uint8_t user::downloadFingerprintTemplate(uint16_t id)
+uint8_t user::downloadFingerprintTemplate(uint16_t id, uint8_t *fingerTemplate)
 {
     printf("------------------------------------\n");
     printf("Attempting to load #");
@@ -347,7 +423,7 @@ uint8_t user::downloadFingerprintTemplate(uint16_t id)
     finger.receiveModel(bytesReceived);
     printf("Decoding packet...\n");
 
-    uint8_t fingerTemplate[512]; // the real template
+    // uint8_t fingerTemplate[512]; // the real template
     memset(fingerTemplate, 0xff, 512);
 
     // filtering only the data packets
@@ -404,4 +480,5 @@ uint8_t user::deleteFingerprint(uint16_t id)
         printf("%X\n", p);
         return p;
     }
+    return FINGERPRINT_OK;
 }
