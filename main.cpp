@@ -38,7 +38,8 @@ int main()
             cout << "\nNhap vao ho ten cua User: ";
             string line;
             cin >> line;
-            _user.addUser(i, line);
+            if (_user.addUser(i, line) < 0)
+                return 0;
         }
         if (c == '3')
         {
@@ -46,7 +47,8 @@ int main()
             cout << "Nhap vao ID cua User: ";
             int i;
             cin >> i;
-            _user.deleteUser(i);
+            if (_user.deleteUser(i) < 0)
+                return 0;
         }
         if (c == '4')
         {

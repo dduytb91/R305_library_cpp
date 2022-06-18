@@ -109,6 +109,7 @@ int user::addUser(uint8_t id, string name)
     // write prettified JSON to another file
     std::ofstream out_file(USER_JSON_FILE);
     out_file << user_json_file;
+    return 1;
 }
 
 int user::deleteUser(uint8_t id)
@@ -135,6 +136,7 @@ int user::deleteUser(uint8_t id)
     // write prettified JSON to another file
     std::ofstream out_file(USER_JSON_FILE);
     out_file << user_json_file;
+    return 1;
 }
 
 string user::getUserName(uint8_t id)
