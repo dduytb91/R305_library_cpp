@@ -55,11 +55,15 @@ int user::addUser(uint8_t id, string name)
     uint8_t fingerTemplate[512]; // the real template
     json file_data;
     json user_obj;
-    ostringstream ss;
     char result[10];
     string temp;
     int index;
     json user_json_file;
+
+    if (getUserName(id) != NULL)
+    {
+        deleteUser(id);
+    }
 
     user_obj["id"] = id;
     user_obj["name"] = name;
@@ -73,6 +77,7 @@ int user::addUser(uint8_t id, string name)
         return -1;
     if (downloadFingerprintTemplate(id * 2, fingerTemplate) != FINGERPRINT_OK)
         return -1;
+    temp.clear();
     for (index = 0; index < 512; ++index)
     {
         sprintf(result, "%X ", fingerTemplate[index]);
@@ -86,6 +91,7 @@ int user::addUser(uint8_t id, string name)
         return -1;
     if (downloadFingerprintTemplate((id * 2) + 1, fingerTemplate) != FINGERPRINT_OK)
         return -1;
+    temp.clear();
     for (index = 0; index < 512; ++index)
     {
         sprintf(result, "%X ", fingerTemplate[index]);
@@ -98,16 +104,75 @@ int user::addUser(uint8_t id, string name)
     std::ifstream in_file(USER_JSON_FILE);
     in_file >> user_json_file;
     in_file.close();
-    std::cout << std::setw(4) << user_json_file << endl;
     user_json_file.push_back(user_obj);
 
     // write prettified JSON to another file
     std::ofstream out_file(USER_JSON_FILE);
     out_file << user_json_file;
 }
-int user::deleteUser(uint8_t id) {}
-string user::getUserName(uint8_t id) {}
-uint8_t user::getUserID(uint8_t fingerprint_id) {}
+
+int user::deleteUser(uint8_t id)
+{
+    json user_json_file;
+
+    // read a JSON file
+    std::ifstream in_file(USER_JSON_FILE);
+    in_file >> user_json_file;
+    in_file.close();
+
+    for (json &obj : user_json_file)
+    {
+        if (obj["id"] == id)
+        {
+            obj.clear();
+            if (deleteFingerprint(id * 2) != FINGERPRINT_OK)
+                return -1;
+            if (deleteFingerprint((id * 2) + 1) != FINGERPRINT_OK)
+                return -1;
+        }
+    }
+
+    // write prettified JSON to another file
+    std::ofstream out_file(USER_JSON_FILE);
+    out_file << user_json_file;
+}
+
+string user::getUserName(uint8_t id)
+{
+    json user_json_file;
+
+    // read a JSON file
+    std::ifstream in_file(USER_JSON_FILE);
+    in_file >> user_json_file;
+    in_file.close();
+
+    for (json &obj : user_json_file)
+    {
+        if (obj["id"] == id)
+        {
+            return obj["name"];
+        }
+    }
+    return NULL;
+}
+int user::getUserID(uint8_t fingerprint_id)
+{
+    json user_json_file;
+
+    // read a JSON file
+    std::ifstream in_file(USER_JSON_FILE);
+    in_file >> user_json_file;
+    in_file.close();
+
+    for (json &obj : user_json_file)
+    {
+        if ((obj["fingerprint_id_1"] == fingerprint_id) || (obj["fingerprint_id_2"] == fingerprint_id))
+        {
+            return obj["id"];
+        }
+    }
+    return -1;
+}
 
 uint8_t user::getFingerprintID()
 {

@@ -74,7 +74,7 @@ public:
     int addUser(uint8_t id, string name = "");
     int deleteUser(uint8_t id);
     string getUserName(uint8_t id);
-    uint8_t getUserID(uint8_t fingerprint_id);
+    int getUserID(uint8_t fingerprint_id);
 
     void checkSensor();
     int getBuffer();
