@@ -61,8 +61,8 @@ private:
     Adafruit_Fingerprint finger;
     Ring_Buffer buffer;
 
-    uint8_t getFingerprintID(uint8_t *fingerID);
-    int getFingerprintIDez(uint8_t *fingerID);
+    uint8_t getFingerprintID();
+    int getFingerprintIDez();
     uint8_t getFingerprintEnroll(uint16_t id);
     uint8_t downloadFingerprintTemplate(uint16_t id, uint8_t *fingerTemplate);
     uint8_t deleteFingerprint(uint16_t id);
