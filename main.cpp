@@ -3,15 +3,59 @@
 char port[] = "/dev/ttyUSB0";
 
 user _user = user(port);
+int id;
+string name;
+uint8_t c;
 
 int main()
 {
-    _user.addUser(10, "Phan Dinh Duy");
-
+    cout << "Nhap ki tu:\n";
     while (1)
     {
-        // delay(50);
-        // getFingerprintIDez();
+        c = getchar();
+        switch (c)
+        {
+        case '1':
+            cout << "Quet van tay:\n";
+            while (1)
+            {
+                _user.checkSensor();
+                int i = _user.getBuffer();
+                if (i != BUFFER_EMPTY)
+                {
+                    id = _user.getUserID(i);
+                    name = _user.getUserName(id);
+                    cout << "User: " << name << std::endl;
+                    break;
+                }
+            }
+            break;
+        case '2':
+            cout << "Them User:\n";
+            cout << "Nhap vao ID cua User: ";
+            int i;
+            cin >> i;
+            cout << "\nNhap vao ho ten cua User: ";
+            string line;
+            cin >> line;
+            _user.addUser(i, line);
+            break;
+        case '3':
+            cout << "Them User:\n";
+            cout << "Nhap vao ID cua User: ";
+            int i;
+            cin >> i;
+            _user.deleteUser(i);
+            break;
+        case '4':
+            break;
+        case '\n':
+            return 1;
+            break;
+
+        default:
+            break;
+        }
     }
     return 1;
 }
