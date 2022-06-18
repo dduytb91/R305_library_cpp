@@ -13,7 +13,7 @@ int main()
     cout << "Nhap ki tu:\n";
     while (1)
     {
-        getline(std::cin,line);
+        getline(std::cin, line);
         num = stoi(line);
         if (num == 1)
         {
@@ -35,10 +35,10 @@ int main()
         {
             cout << "Them User:\n";
             cout << "Nhap vao ID cua User: ";
-            getline(std::cin,line);
+            getline(std::cin, line);
             num = stoi(line);
             cout << "\nNhap vao ho ten cua User: ";
-            getline(std::cin,line);
+            getline(std::cin, line);
             if (_user.addUser(num, line) < 0)
                 return 0;
             cout << "Them User thanh cong.\n";
@@ -47,7 +47,7 @@ int main()
         {
             cout << "Xoa User:\n";
             cout << "Nhap vao ID cua User: ";
-            getline(std::cin,line);
+            getline(std::cin, line);
             num = stoi(line);
             if (_user.deleteUser(num) < 0)
                 return 0;

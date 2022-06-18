@@ -12,10 +12,6 @@ user::user(char *device, uint32_t baud, uint32_t password)
     else
     {
         printf("Did not find fingerprint sensor :(\n");
-        while (1)
-        {
-            delay(1);
-        }
     }
     finger.getTemplateCount();
     printf("Sensor contains \n");

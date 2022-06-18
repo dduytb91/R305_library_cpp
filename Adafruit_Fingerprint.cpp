@@ -194,7 +194,7 @@ uint8_t Adafruit_Fingerprint::receiveModel(uint8_t *buffer)
     int i = 0;
     while (i < 534 && (millis() - starttime) < 20000)
     {
-        if(serialDataAvail(_fd))
+        if (serialDataAvail(_fd))
         {
             buffer[i++] = (uint8_t)serialGetchar(_fd);
         }
