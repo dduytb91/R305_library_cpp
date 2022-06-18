@@ -56,7 +56,7 @@ int user::addUser(uint8_t id, string name)
     json file_data;
     json user_obj;
     ostringstream ss;
-    string result;
+    char result[10];
     string temp;
     int index;
     json user_json_file;
@@ -75,9 +75,9 @@ int user::addUser(uint8_t id, string name)
         return -1;
     for (index = 0; index < 512; ++index)
     {
-        ss << std::hex << fingerTemplate[index];
-        result = ss.str();
-        temp.append(result + " ");
+        sprintf(result, "%X ", fingerTemplate[index]);
+        string str(result);
+        temp += str;
     }
     user_obj["fingerprint_model_1"] = temp;
 
@@ -88,9 +88,9 @@ int user::addUser(uint8_t id, string name)
         return -1;
     for (index = 0; index < 512; ++index)
     {
-        ss << std::hex << fingerTemplate[index];
-        result = ss.str();
-        temp.append(result + " ");
+        sprintf(result, "%X ", fingerTemplate[index]);
+        string str(result);
+        temp += str;
     }
     user_obj["fingerprint_model_2"] = temp;
 
@@ -98,7 +98,7 @@ int user::addUser(uint8_t id, string name)
     std::ifstream in_file(USER_JSON_FILE);
     in_file >> user_json_file;
     in_file.close();
-    // std::cout << std::setw(4) << user_json_file << endl;
+    std::cout << std::setw(4) << user_json_file << endl;
     user_json_file.push_back(user_obj);
 
     // write prettified JSON to another file
